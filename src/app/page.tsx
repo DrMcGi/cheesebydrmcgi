@@ -1,5 +1,5 @@
-import { EnterTheDairy } from '@/components/enter-the-dairy';
+import { EnterTheDairyLanding } from '@/components/enter-the-dairy/landing';
 
 export default function HomePage() {
-  return <EnterTheDairy />;
+  return <EnterTheDairyLanding />;
 }
