@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "generate:audio": "node scripts/generate-audio.js",
+    "postinstall": "npm run generate:audio"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

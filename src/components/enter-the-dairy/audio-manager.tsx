@@ -17,8 +17,8 @@ export function AudioManager({ onAudioEnabled, onAudioFailed, isMuted }: AudioMa
     if (typeof window === 'undefined') return;
 
     // Create audio elements
-    const cashCounter = new Audio('/audio/cash-counter.mp3');
-    const bassDrone = new Audio('/audio/low-bass-drone.mp3');
+    const cashCounter = new Audio('/audio/cash-counter.wav');
+    const bassDrone = new Audio('/audio/low-bass-drone.wav');
 
     cashCounter.loop = true;
     bassDrone.loop = true;
