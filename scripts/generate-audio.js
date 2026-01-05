@@ -5,7 +5,7 @@
  * Pure JavaScript WAV generation with no native dependencies
  */
 
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -75,7 +75,14 @@ function writeWavFile(filename, samples, sampleRate) {
   }
 
   // Ensure directory exists
-  mkdirSync(dirname(filename), { recursive: true });
+  try {
+    mkdirSync(dirname(filename), { recursive: true });
+  } catch (err) {
+    // Ignore EEXIST errors, rethrow others
+    if (err.code !== 'EEXIST') {
+      throw err;
+    }
+  }
   writeFileSync(filename, buffer);
   console.log(`✓ Generated ${filename} (${(fileSize / 1024).toFixed(2)} KB)`);
 }
@@ -202,18 +209,32 @@ function generateCashCounter() {
 
 // Main execution
 function main() {
+  const outputDir = `${__dirname}/../public/audio`;
+  const bassDroneFile = `${outputDir}/low-bass-drone.wav`;
+  const cashCounterFile = `${outputDir}/cash-counter.wav`;
+  
+  // Check if files already exist (skip generation during postinstall if already present)
+  const filesExist = existsSync(bassDroneFile) && existsSync(cashCounterFile);
+  
+  // Allow forcing regeneration via environment variable
+  const forceRegenerate = process.env.FORCE_REGENERATE === 'true' || process.argv.includes('--force');
+  
+  if (filesExist && !forceRegenerate) {
+    console.log('✓ Audio files already exist. Skipping generation.');
+    console.log('  Run with --force flag or FORCE_REGENERATE=true to regenerate.');
+    return;
+  }
+  
   console.log('Generating audio files...');
   console.log(`Seed: ${SEED} (change to regenerate with different audio)`);
   
-  const outputDir = `${__dirname}/../public/audio`;
-  
   // Generate low-bass-drone
   const bassDrone = generateLowBassDrone();
-  writeWavFile(`${outputDir}/low-bass-drone.wav`, bassDrone, SAMPLE_RATE);
+  writeWavFile(bassDroneFile, bassDrone, SAMPLE_RATE);
   
   // Generate cash-counter
   const cashCounter = generateCashCounter();
-  writeWavFile(`${outputDir}/cash-counter.wav`, cashCounter, SAMPLE_RATE);
+  writeWavFile(cashCounterFile, cashCounter, SAMPLE_RATE);
   
   console.log('\n✓ All audio files generated successfully!');
 }
