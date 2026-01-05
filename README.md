@@ -18,6 +18,8 @@ pnpm i
 # or: npm i / yarn
 ```
 
+Audio files are automatically generated during `npm install` via the `postinstall` hook.
+
 ### 2) Environment variables
 Create a `.env.local`:
 ```bash
@@ -53,3 +55,12 @@ pnpm dev
 
 ## Notes
 This is an initial scaffold intended to be extended with real product/catalog, checkout, and fulfillment logic.
+
+## Audio Assets
+Audio files (`low-bass-drone.wav` and `cash-counter.wav`) are generated deterministically using pure JavaScript. 
+
+- **Generation**: Run `npm run generate:audio` to manually regenerate
+- **Force regeneration**: Use `npm run generate:audio -- --force` or set `FORCE_REGENERATE=true`
+- **Customization**: Edit `scripts/generate-audio.js` and change the `SEED` constant for different audio output
+- **Tech**: Pure JS WAV generation (44.1kHz, 16-bit PCM mono, no native dependencies)
+
