@@ -13,6 +13,7 @@ body {
 
 body {
   @apply bg-zinc-950 text-zinc-50;
+  cursor: url(/cursor/cheese-cursor.png) 16 16, auto;
 }
 
 a {
