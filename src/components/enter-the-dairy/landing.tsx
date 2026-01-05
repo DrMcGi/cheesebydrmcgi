@@ -65,7 +65,7 @@ export function EnterTheDairyLanding() {
       <div 
         className="fixed inset-0 bg-black"
         style={{
-          cursor: 'url(/cursor/cheese-cursor.png) 16 16, auto',
+          cursor: 'url(/cursor/cheese-cursor.svg) 8 6, auto',
         }}
       >
         {/* Grain overlay */}
