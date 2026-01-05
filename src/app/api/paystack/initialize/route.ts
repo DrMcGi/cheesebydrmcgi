@@ -6,7 +6,7 @@ const BodySchema = z.object({
   email: z.string().email(),
   amount: z.number().int().positive(),
   currency: z.string().optional(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
 });
 
 export async function POST(req: Request) {
