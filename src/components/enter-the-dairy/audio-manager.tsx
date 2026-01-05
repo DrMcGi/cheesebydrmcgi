@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 
 interface AudioManagerProps {
   onAudioEnabled?: () => void;
+  onAudioFailed?: () => void;
   isMuted: boolean;
 }
 
-export function AudioManager({ onAudioEnabled, isMuted }: AudioManagerProps) {
+export function AudioManager({ onAudioEnabled, onAudioFailed, isMuted }: AudioManagerProps) {
   const cashCounterRef = useRef<HTMLAudioElement | null>(null);
   const bassDroneRef = useRef<HTMLAudioElement | null>(null);
   const [initialized, setInitialized] = useState(false);
@@ -36,6 +37,7 @@ export function AudioManager({ onAudioEnabled, isMuted }: AudioManagerProps) {
       } catch (error) {
         // Autoplay blocked, user needs to interact
         console.log('Autoplay blocked, waiting for user interaction');
+        onAudioFailed?.();
       }
     };
 
@@ -45,7 +47,7 @@ export function AudioManager({ onAudioEnabled, isMuted }: AudioManagerProps) {
       cashCounter.pause();
       bassDrone.pause();
     };
-  }, [onAudioEnabled]);
+  }, [onAudioEnabled, onAudioFailed]);
 
   useEffect(() => {
     if (!cashCounterRef.current || !bassDroneRef.current) return;
@@ -60,20 +62,4 @@ export function AudioManager({ onAudioEnabled, isMuted }: AudioManagerProps) {
   }, [isMuted, initialized]);
 
   return null;
-}
-
-export function enableAudio(
-  cashCounterRef: React.RefObject<HTMLAudioElement | null>,
-  bassDroneRef: React.RefObject<HTMLAudioElement | null>
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (!cashCounterRef.current || !bassDroneRef.current) {
-      reject(new Error('Audio elements not initialized'));
-      return;
-    }
-
-    Promise.all([cashCounterRef.current.play(), bassDroneRef.current.play()])
-      .then(() => resolve())
-      .catch(reject);
-  });
 }

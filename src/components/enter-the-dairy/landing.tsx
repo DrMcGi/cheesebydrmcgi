@@ -108,6 +108,7 @@ export function EnterTheDairyLanding() {
       {/* Audio components */}
       <AudioManager 
         onAudioEnabled={handleAudioEnabled}
+        onAudioFailed={handleAudioFailed}
         isMuted={isMuted}
       />
       
