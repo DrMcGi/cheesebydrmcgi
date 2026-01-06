@@ -7,12 +7,21 @@ export function GoogleSignInButton() {
     const supabase = createSupabaseBrowserClient();
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
 
-    await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${siteUrl}/auth/callback`,
       },
     });
+
+    if (error) {
+      console.error('Google sign-in failed:', error);
+    }
+
+    // If successful, Supabase will redirect the browser. `data` is kept for debugging.
+    if (!data?.url && !error) {
+      console.warn('Google sign-in did not return a redirect URL. Check Supabase provider setup and redirect URLs.');
+    }
   }
 
   return (
